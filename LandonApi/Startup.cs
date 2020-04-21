@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
 using NSwag.AspNetCore;
 
 namespace LandonApi
@@ -33,6 +34,13 @@ namespace LandonApi
             services.Configure<HotelInfo>(
                 Configuration.GetSection("Info"));
 
+            // Use an in-memory database for quick development and testing
+            // Swap out for real database in production
+            services.AddDbContext<HotelApiDbContext>(options =>
+            {
+                options.UseInMemoryDatabase("landondb");
+            })
+            
             services.AddControllers(options =>
             {
                 options.Filters.Add<JsonExceptionFilter>();
