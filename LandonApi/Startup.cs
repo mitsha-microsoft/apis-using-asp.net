@@ -17,6 +17,8 @@ using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using NSwag.AspNetCore;
 using LandonApi.Services;
+using AutoMapper;
+using LandonApi.Infrastructure;
 
 namespace LandonApi
 {
@@ -62,6 +64,12 @@ namespace LandonApi
                 options.ReportApiVersions = true;
                 options.ApiVersionSelector = new CurrentImplementationApiVersionSelector(options);
             });
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowMyApp", policy => policy.AllowAnyOrigin());
