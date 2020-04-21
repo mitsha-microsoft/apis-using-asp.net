@@ -35,11 +35,11 @@ namespace LandonApi
                 Configuration.GetSection("Info"));
 
             // Use an in-memory database for quick development and testing
-            // Swap out for real database in production
+            // TODO: Swap out for real database in production
             services.AddDbContext<HotelApiDbContext>(options =>
             {
                 options.UseInMemoryDatabase("landondb");
-            })
+            });
             
             services.AddControllers(options =>
             {
