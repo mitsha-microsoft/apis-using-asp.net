@@ -36,9 +36,13 @@ namespace LandonApi
         {
             services.Configure<HotelInfo>(
                 Configuration.GetSection("Info"));
+            services.Configure<HotelOptions>(Configuration);
+            services.Configure<PagingOptions>(Configuration.GetSection("DefaultPagingOptions"));
 
             services.AddScoped<IRoomService, DefaultRoomService>();
-
+            services.AddScoped<IOpeningService, DefaultOpeningService>();
+            services.AddScoped<IBookingService, DefaultBookingService>();
+            services.AddScoped<IDateLogicService, DefaultDateLogicService>();
             // Use an in-memory database for quick development and testing
             // TODO: Swap out for real database in production
             services.AddDbContext<HotelApiDbContext>(options =>
@@ -74,6 +78,15 @@ namespace LandonApi
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowMyApp", policy => policy.AllowAnyOrigin());
+            });
+
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = context =>
+                {
+                    var errorResponse = new ApiError(context.ModelState);
+                    return new BadRequestObjectResult(errorResponse);
+                };
             });
         }
 

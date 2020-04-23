@@ -8,7 +8,8 @@ namespace LandonApi.Services
 {
     public interface IRoomService
     {
-        Task<Room> GetRoomsAsync(Guid id);
         Task<IEnumerable<Room>> GetRoomsAsync();
+
+        Task<Room> GetRoomAsync(Guid id);
     }
 }
